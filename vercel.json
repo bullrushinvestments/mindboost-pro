@@ -1,0 +1,157 @@
+interface BuildCommand {
+  command: string;
+  output?: string;
+}
+
+interface EnvVariables {
+  [key: string]: string | undefined;
+}
+
+interface HeaderRule {
+  source: string;
+  headers: Array<{ key: string; value: string }>;
+}
+
+interface CacheStrategy {
+  rules: Array<{
+    urlPathPattern: string;
+    edgeTtlSeconds: number;
+    browserTtlSeconds?: number;
+  }>;
+}
+
+interface FrameworkSettings {
+  vercel?: Record<string, any>;
+  netlify?: Record<string, any>;
+}
+
+interface DeployConfig {
+  build: BuildCommand;
+  env: EnvVariables;
+  headers: Array<HeaderRule>;
+  cache: CacheStrategy;
+  framework: FrameworkSettings;
+}
+
+export const deployConfig: DeployConfig = {
+  build: {
+    command: "next build",
+    output: ".next"
+  },
+  env: {
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
+    DATABASE_URI: process.env.DATABASE_URI
+  },
+  headers: [
+    {
+      source: "/api/:path*",
+      headers: [
+        { key: "Access-Control-Allow-Credentials", value: "true" },
+        { key: "Access-Control-Allow-Origin", value: "*" }
+      ]
+    }
+  ],
+  cache: {
+    rules: [
+      {
+        urlPathPattern: "**/*.js",
+        edgeTtlSeconds: 3600,
+        browserTtlSeconds: 1800
+      },
+      {
+        urlPathPattern: "/api/**",
+        edgeTtlSeconds: 0
+      }
+    ]
+  },
+  framework: {
+    vercel: {
+      buildCommand: "next build",
+      startCommand: "next start"
+    },
+    netlify: {
+      build: { command: "yarn run build" },
+      functions: ".functions",
+      redirects: "redirects.json"
+    }
+  }
+};
+
+interface BuildCommand {
+  command: string;
+  output?: string;
+}
+
+interface EnvVariables {
+  [key: string]: string | undefined;
+}
+
+interface HeaderRule {
+  source: string;
+  headers: Array<{ key: string; value: string }>;
+}
+
+interface CacheStrategy {
+  rules: Array<{
+    urlPathPattern: string;
+    edgeTtlSeconds: number;
+    browserTtlSeconds?: number;
+  }>;
+}
+
+interface FrameworkSettings {
+  vercel?: Record<string, any>;
+  netlify?: Record<string, any>;
+}
+
+interface DeployConfig {
+  build: BuildCommand;
+  env: EnvVariables;
+  headers: Array<HeaderRule>;
+  cache: CacheStrategy;
+  framework: FrameworkSettings;
+}
+
+export const deployConfig: DeployConfig = {
+  build: {
+    command: "next build",
+    output: ".next"
+  },
+  env: {
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
+    DATABASE_URI: process.env.DATABASE_URI
+  },
+  headers: [
+    {
+      source: "/api/:path*",
+      headers: [
+        { key: "Access-Control-Allow-Credentials", value: "true" },
+        { key: "Access-Control-Allow-Origin", value: "*" }
+      ]
+    }
+  ],
+  cache: {
+    rules: [
+      {
+        urlPathPattern: "**/*.js",
+        edgeTtlSeconds: 3600,
+        browserTtlSeconds: 1800
+      },
+      {
+        urlPathPattern: "/api/**",
+        edgeTtlSeconds: 0
+      }
+    ]
+  },
+  framework: {
+    vercel: {
+      buildCommand: "next build",
+      startCommand: "next start"
+    },
+    netlify: {
+      build: { command: "yarn run build" },
+      functions: ".functions",
+      redirects: "redirects.json"
+    }
+  }
+};
